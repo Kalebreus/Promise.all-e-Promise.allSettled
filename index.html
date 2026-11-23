@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Filmes Ghibli com Promise.all e Promise.allSettled</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="config.js" defer></script>
+    <script src="api.js" defer></script>
+    <script src="index.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Buscando múltiplos filmes Ghibli</h1>
+      <p>Comece por uma consulta individual e compare como Promise.all e Promise.allSettled tratam os três resultados.</p>
+      <aside class="observacao">
+        <h2>Correção no ID da aula</h2>
+        <p>O ID enviado para Grave of the Fireflies contém <code>0ac0</code>; o catálogo usa <code>aac0</code>. Em 23/11/2026, o original retornou 404 e o corrigido retornou 200. O exemplo começa com os IDs verificados e permite reproduzir o erro.</p>
+      </aside>
+      <p id="aviso-http" class="observacao" hidden>Execute a pasta por HTTP conforme o README. Abrir por file:// pode impedir as consultas com fetch.</p>
+
+      <section aria-labelledby="titulo-controles">
+        <h2 id="titulo-controles">1. Escolha a origem e o cenário</h2>
+        <label for="origem">Origem dos dados</label>
+        <select id="origem">
+          <option value="api">API comunitária Studio Ghibli ao vivo</option>
+          <option value="local">Amostras locais capturadas da API em 23/11/2026</option>
+        </select>
+        <p id="descricao-origem">Consulta externa ao serviço ghibliapi.vercel.app. A disponibilidade depende da rede e do serviço.</p>
+        <label class="opcao" for="id-original">
+          <input id="id-original" type="checkbox">
+          Reproduzir o ID incorreto da aula para o segundo filme
+        </label>
+        <label for="filme-unico">Filme para a consulta individual</label>
+        <select id="filme-unico">
+          <option value="0">Castle in the Sky</option>
+          <option value="1">Grave of the Fireflies</option>
+          <option value="2">My Neighbor Totoro</option>
+        </select>
+        <label for="limite-ms">Tempo limite por filme, em milissegundos</label>
+        <input id="limite-ms" type="number" min="100" max="30000" step="100" value="8000">
+        <div class="acoes">
+          <button id="buscar-um" type="button" data-metodo="um">Buscar um filme</button>
+          <button id="buscar-all" type="button" data-metodo="all">Buscar com Promise.all</button>
+          <button id="buscar-settled" type="button" data-metodo="allSettled">Buscar com Promise.allSettled</button>
+        </div>
+      </section>
+
+      <section aria-labelledby="titulo-resultados">
+        <h2 id="titulo-resultados">2. Observe os resultados</h2>
+        <p id="estado-busca" role="status" data-estado="idle">Aguardando uma consulta.</p>
+        <p id="fase-busca" role="status"></p>
+        <p>Filmes exibidos: <span id="qtd-filmes">0</span> · Falhas reportadas: <span id="qtd-falhas">0</span></p>
+        <div id="painel-resultados" aria-busy="false">
+          <ul id="lista-filmes" class="filmes" aria-label="Filmes carregados"></ul>
+          <ul id="lista-falhas" aria-label="Falhas das consultas"></ul>
+        </div>
+        <h3>Relatório na ordem dos IDs</h3>
+        <pre id="relatorio" aria-label="Relatório das consultas"></pre>
+        <h3>Registro de execução</h3>
+        <ol id="log-consultas"></ol>
+      </section>
+
+      <section aria-labelledby="titulo-pratica">
+        <h2 id="titulo-pratica">3. Compare sucesso total e parcial</h2>
+        <p>Use os IDs verificados com os dois métodos. Depois marque o ID incorreto e repita: neste exemplo, o modo all não exibe cartões se o conjunto rejeitar; allSettled permite exibir os filmes disponíveis e identificar a falha.</p>
+        <button id="interagir" type="button">Interagir durante a consulta</button>
+        <p id="contador" role="status">Interações: 0</p>
+        <p>As amostras locais são arquivos estáticos com campos selecionados da API. A origem escolhida permanece explícita; uma falha da API não é substituída automaticamente por uma amostra.</p>
+      </section>
+      <noscript>Ative o JavaScript no navegador para executar os exemplos.</noscript>
+    </main>
+  </body>
+</html>
